@@ -24,6 +24,18 @@ const KnowledgeFiles = () => {
     setShowNewForm(true);
   };
 
+  const [isTimeIntervalChecked, setIsTimeIntervalChecked] = React.useState(false);
+
+  const handleRadioChange = (type) => {
+    if (type === "dateRange") {
+      setIsDateRangeChecked(!isDateRangeChecked);
+      if (isTimeIntervalChecked) setIsTimeIntervalChecked(false);
+    } else if (type === "timeInterval") {
+      setIsTimeIntervalChecked(!isTimeIntervalChecked);
+      if (isDateRangeChecked) setIsDateRangeChecked(false);
+    }
+  };
+
   return (
     <div>
       <div className="bg-gray-100 mx-10 py-6 rounded-xl">
@@ -64,20 +76,21 @@ const KnowledgeFiles = () => {
             <div>
               <div className="mt-2 flex space-x-6">
                 <label className="inline-flex items-center">
-                  <input type="checkbox" className="form-checkbox" />
-                  <span className="ml-2">Continuous crawl</span>
-                </label>
-                <label className="inline-flex items-center">
                   <input
-                    type="checkbox"
+                    type="radio"
                     className="form-checkbox"
                     checked={isDateRangeChecked}
-                    onChange={() => setIsDateRangeChecked(!isDateRangeChecked)}
+                    onChange={() => handleRadioChange("dateRange")}
                   />
                   <span className="ml-2">Date range</span>
                 </label>
                 <label className="inline-flex items-center">
-                  <input type="checkbox" className="form-checkbox" />
+                  <input
+                    type="radio"
+                    className="form-checkbox"
+                    checked={isTimeIntervalChecked}
+                    onChange={() => handleRadioChange("timeInterval")}
+                  />
                   <span className="ml-2">Time interval</span>
                 </label>
               </div>
@@ -108,13 +121,26 @@ const KnowledgeFiles = () => {
             </div>
           </div>
         )}
+        {isTimeIntervalChecked && (
+          <div className="flex w-full justify-between px-8 space-x-2 mt-6">
+            <div className="flex flex-col">
+              <span className="text-lg font-semibold ml-1">Retrieve Data for Last (Months)</span>
+              <input
+                type="date"
+                className="p-2 border rounded w-96 mt-4"
+                placeholder="Start time"
+              />
+            </div>
+          </div>
+        )}
       </div>
       <div className="flex justify-end mr-10 mt-4 mb-4">
         <button
-          className="bg-blue-600 text-white py-2 px-4 rounded-lg"
+          className="text-white py-2 px-4 rounded-lg"
+          style={{ backgroundColor: "#006FB9" }}
           onClick={handleAddConfigClick}
         >
-          Add configuration set
+          Save
         </button>
       </div>
       {showNewForm && (
@@ -161,7 +187,12 @@ const KnowledgeFiles = () => {
                     <span className="ml-2">Date range</span>
                   </label>
                   <label className="inline-flex items-center">
-                    <input type="checkbox" className="form-checkbox" />
+                    <input
+                      type="checkbox"
+                      className="form-checkbox"
+                      checked={isTimeIntervalChecked}
+                      onChange={() => setIsTimeIntervalChecked(!isTimeIntervalChecked)}
+                    />
                     <span className="ml-2">Time interval</span>
                   </label>
                 </div>
@@ -172,6 +203,46 @@ const KnowledgeFiles = () => {
               <input type="text" className="p-2 border rounded" />
             </div>
           </div>
+          {isDateRangeChecked && (
+            <div className="flex w-full justify-between px-8 space-x-2 mt-6">
+              <div className="w-full">
+                <span className="text-lg font-semibold ml-1">Start date crawl</span>
+                <input
+                  type="date"
+                  className="p-2 border rounded w-full mt-4"
+                  placeholder="Start date"
+                />
+              </div>
+              <div className="w-full">
+                <span className="text-lg font-semibold ml-1">End date crawl</span>
+                <input
+                  type="date"
+                  className="p-2 border rounded w-full mt-4"
+                  placeholder="End date"
+                />
+              </div>
+            </div>
+          )}
+          {isTimeIntervalChecked && (
+            <div className="flex w-full justify-between px-8 space-x-2 mt-6">
+              <div className="w-full">
+                <span className="text-lg font-semibold ml-1">Start time interval</span>
+                <input
+                  type="time"
+                  className="p-2 border rounded w-full mt-4"
+                  placeholder="Start time"
+                />
+              </div>
+              <div className="w-full">
+                <span className="text-lg font-semibold ml-1">End time interval</span>
+                <input
+                  type="time"
+                  className="p-2 border rounded w-full mt-4"
+                  placeholder="End time"
+                />
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
